@@ -15,6 +15,30 @@ enum Role {
   ADMIN
 }
 
+enum TicketCategory {
+  INCIDENT
+  SERVICE_REQUEST
+  ACCESS_REQUEST
+  HARDWARE
+  SOFTWARE
+  NETWORK
+  OTHER
+}
+
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
 model User {
   id              String           @id @default(uuid()) @db.Uuid
   email           String           @unique @db.VarChar(254)
@@ -24,6 +48,7 @@ model User {
   role            Role             @default(USER)
   isActive        Boolean          @default(true) @map("is_active")
   teamMemberships TeamMembership[]
+  tickets         Ticket[]
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")
 
@@ -58,4 +83,21 @@ model TeamMembership {
   @@unique([userId, teamId])
   @@index([teamId, isLead])
   @@map("team_memberships")
+}
+
+model Ticket {
+  id          String         @id @default(uuid()) @db.Uuid
+  requesterId String         @map("requester_id") @db.Uuid
+  title       String         @db.VarChar(200)
+  description String         @db.Text
+  category    TicketCategory
+  priority    TicketPriority @default(NORMAL)
+  status      TicketStatus   @default(OPEN)
+  requester   User           @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  @@index([requesterId, createdAt])
+  @@index([status, priority, createdAt])
+  @@map("tickets")
 }

@@ -5,7 +5,7 @@
   "description": "NEXUS IT operations API",
   "main": "index.js",
   "scripts": {
-    "test": "tsx --test test/health.test.ts",
+    "test": "tsx --test --test-concurrency=1 test/*.test.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
