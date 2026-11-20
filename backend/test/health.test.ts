@@ -1,3 +1,4 @@
+import "./require-test-runner.mjs";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { createServer } from "node:http";

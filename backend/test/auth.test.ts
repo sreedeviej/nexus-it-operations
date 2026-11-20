@@ -1,3 +1,4 @@
+import "./require-test-runner.mjs";
 import jwt from "jsonwebtoken";
 import { env } from "../src/config/env.js";
 import { randomUUID } from "node:crypto";
